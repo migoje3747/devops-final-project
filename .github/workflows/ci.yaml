@@ -190,9 +190,12 @@ jobs:
 
   run:
     name: Create and Run Container
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-and-scan
     steps:
+      - name: Create Images
+        run: |
+          docker build -t test-app:latest .
       - name: Run
         run: |
-          docker run --name flask-app test-app:latest
+          docker run --name flask-app -p 3000:5000 test-app:latest
