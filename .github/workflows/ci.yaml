@@ -187,3 +187,12 @@ jobs:
           else
             echo "❌ Trivy scan results not found"
           fi
+
+  run:
+    name: Create and Run Container
+    runs-on: ubuntu-latest
+    needs: build-and-scan
+    steps:
+      - name: Run
+        run: |
+          docker run --name flask-app test-app:latest
