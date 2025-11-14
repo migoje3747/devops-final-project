@@ -230,5 +230,5 @@ jobs:
           docker rm -f flask-app
       - name: Run
         run: |
-          docker run --name flask-app -p 3000:5000 test-app:latest
+          docker run -d --name flask-app -p 3000:5000 test-app:latest
 
