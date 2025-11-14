@@ -220,7 +220,7 @@ jobs:
   run:
     name: Create and Run Container
     runs-on: self-hosted
-    # needs: [build-and-scan, test]
+    needs: [build-and-scan, test]
     env:
       ENVIRONMENT: ${{ github.event_name == 'pull_request' && 'production' || 'staging' }}
     
