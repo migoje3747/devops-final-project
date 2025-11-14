@@ -117,7 +117,7 @@ jobs:
   sonar:
     name: SonarQube Analysis with Coverage 📈
     runs-on: self-hosted
-    needs: test
+    needs: sonar_run
     env:
       SONAR_PROJECT_KEY: devops-final-project
       SONAR_PROJECT_NAME: DevOps Final Project
@@ -170,7 +170,7 @@ jobs:
 
   build-and-scan:
     name: Build & Scan Image 🛠️🔒
-    runs-on: ubuntu-latest
+    runs-on: sonar
     needs: sonar
     steps:
       - name: Checkout
@@ -220,7 +220,7 @@ jobs:
   run:
     name: Create and Run Container
     runs-on: self-hosted
-    needs: build-and-scan
+    needs: [build-and-scan, test]
     steps:
       - name: Create Images
         run: |
