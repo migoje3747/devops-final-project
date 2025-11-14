@@ -229,6 +229,11 @@ jobs:
       url: http://$ENVIRONMENT.local
 
     steps:
+      - name: Check variables
+        run: |
+          echo "github.event_name: ${{ github.event_name }}"
+          echo "github.base_ref: ${{ github.base_ref }}"
+          echo "ENVIRONMENT: $ENVIRONMENT"
       - name: Create Images
         run: |
           docker build -t test-app:$ENVIRONMENT .
