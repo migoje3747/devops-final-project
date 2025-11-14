@@ -7,6 +7,19 @@ on:
   workflow_dispatch:
 
 jobs:
+  sonar:
+    name: SonarQube run
+    runs-on: self-hosted
+    env:
+      SONAR_PROJECT_KEY: devops-final-project
+      SONAR_PROJECT_NAME: DevOps Final Project
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: http://localhost:9090
+    steps:
+      - name: Execute
+        run: docker compose -f docker-compose.yml up -d
+
+
   lint:
     name: Lint Code 🔎
     runs-on: ubuntu-latest
@@ -111,6 +124,22 @@ jobs:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       SONAR_HOST_URL: http://localhost:9090
     steps:
+
+      - name: Esperar a que SonarQube esté disponible
+        run: |
+          max_attempts=30
+          attempt=1
+          until curl -sSf $SONAR_HOST_URL/api/system/status | grep -q '"status":"UP"'; do
+            if [ $attempt -ge $max_attempts ]; then
+              echo "❌ SonarQube no disponible tras $max_attempts intentos"
+              exit 1
+            fi
+            echo "⏳ Esperando a SonarQube... intento $attempt/$max_attempts"
+            attempt=$((attempt+1))
+            sleep 10
+          done
+          echo "✅ SonarQube está disponible"
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -199,3 +228,4 @@ jobs:
       - name: Run
         run: |
           docker run --name flask-app -p 3000:5000 test-app:latest
+
