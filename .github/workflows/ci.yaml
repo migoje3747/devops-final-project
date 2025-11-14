@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  sonar:
+  sonar_run:
     name: SonarQube run
     runs-on: self-hosted
     env:
