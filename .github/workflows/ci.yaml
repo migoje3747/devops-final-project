@@ -226,7 +226,7 @@ jobs:
     
     environment:
       name: $ENVIRONMENT
-      url: http://$ENVIRONMENT.local
+      url: http://${ ENVIRONMENT }.local
 
     steps:
       - name: Check variables
