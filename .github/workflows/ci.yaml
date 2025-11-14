@@ -221,8 +221,8 @@ jobs:
     name: Create and Run Container
     runs-on: self-hosted
     needs: [build-and-scan, test]
-    env:
-      ENVIRONMENT: ${{ github.ref_name }}
+    env:      
+      ENVIRONMENT: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
     
     environment:
       name: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
@@ -239,13 +239,13 @@ jobs:
         run: |
           echo "Deploying to environment: $ENVIRONMENT"
 
-          if [ "$ENVIRONMENT" = "staging" ]; then
-            PORT=5001
+          if [ "$ENVIRONMENT" = "production" ]; then
+            PORT=3002
           else
-            PORT=5002
+            PORT=3001
           fi
 
           docker run -d \
             --name flask-app-$ENVIRONMENT \
-            -p 3000:$PORT \
+            -p $PORT:5000 \
             test-app:$ENVIRONMENT
