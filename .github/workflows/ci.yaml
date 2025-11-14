@@ -170,7 +170,7 @@ jobs:
 
   build-and-scan:
     name: Build & Scan Image 🛠️🔒
-    runs-on: sonar
+    runs-on: ubuntu-latest
     needs: sonar
     steps:
       - name: Checkout
@@ -225,6 +225,9 @@ jobs:
       - name: Create Images
         run: |
           docker build -t test-app:latest .
+      - name: Remove container
+        run: |
+          docker rm -f flask-app
       - name: Run
         run: |
           docker run --name flask-app -p 3000:5000 test-app:latest
