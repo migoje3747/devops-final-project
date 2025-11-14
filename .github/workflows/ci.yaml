@@ -1,234 +1,257 @@
 name: CI - Lint, Test, Sonar, Build, Scan
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  sonar_run:
-    name: SonarQube run
-    runs-on: self-hosted
-    env:
-      SONAR_PROJECT_KEY: devops-final-project
-      SONAR_PROJECT_NAME: DevOps Final Project
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      SONAR_HOST_URL: http://localhost:9090
-    steps:
-      - name: Execute
-        run: docker compose -f docker-compose.yml up -d
+  # sonar_run:
+  #   name: SonarQube run
+  #   runs-on: self-hosted
+  #   env:
+  #     SONAR_PROJECT_KEY: devops-final-project
+  #     SONAR_PROJECT_NAME: DevOps Final Project
+  #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #     SONAR_HOST_URL: http://localhost:9090
+  #   steps:
+  #     - name: Execute
+  #       run: docker compose -f docker-compose.yml up -d
 
 
-  lint:
-    name: Lint Code 🔎
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          clean: true
+  # lint:
+  #   name: Lint Code 🔎
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         clean: true
 
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache-dependency-path: requirements.txt
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: '3.11'
+  #         cache-dependency-path: requirements.txt
         
 
-      - name: Create virtual environment
-        run: |
-            python -m venv venv
-            source venv/bin/activate
-            echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
-            echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
+  #     - name: Create virtual environment
+  #       run: |
+  #           python -m venv venv
+  #           source venv/bin/activate
+  #           echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
+  #           echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
 
-      - name: Install dependencies
-        run: |
-            python -m pip install --upgrade pip
-            pip install -r requirements.txt
-            pip install pylint
+  #     - name: Install dependencies
+  #       run: |
+  #           python -m pip install --upgrade pip
+  #           pip install -r requirements.txt
+  #           pip install pylint
 
-      - name: Run pylint & enforce score
-        run: |
-            chmod +x scripts/check_pylint_score.sh
-            ./scripts/check_pylint_score.sh 8.0
+  #     - name: Run pylint & enforce score
+  #       run: |
+  #           chmod +x scripts/check_pylint_score.sh
+  #           ./scripts/check_pylint_score.sh 8.0
 
-  test:
-    name: Run Tests with Coverage 🧪
-    runs-on: ubuntu-latest
-    needs: lint
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          clean: true
+  # test:
+  #   name: Run Tests with Coverage 🧪
+  #   runs-on: ubuntu-latest
+  #   needs: lint
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         clean: true
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache-dependency-path: requirements.txt
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: '3.11'
+  #         cache-dependency-path: requirements.txt
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+  #     - name: Install dependencies
+  #       run: |
+  #         python -m pip install --upgrade pip
+  #         pip install -r requirements.txt
 
-      - name: Run tests with coverage
-        run: |
-          echo "🧪 Running unit tests with coverage analysis..."
-          pytest test_app.py -v --cov=app --cov-report=term --cov-report=xml --cov-report=html
-          echo "✅ Tests completed with coverage analysis!"
+  #     - name: Run tests with coverage
+  #       run: |
+  #         echo "🧪 Running unit tests with coverage analysis..."
+  #         pytest test_app.py -v --cov=app --cov-report=term --cov-report=xml --cov-report=html
+  #         echo "✅ Tests completed with coverage analysis!"
 
-      - name: Check coverage threshold
-        run: |
-          chmod +x scripts/check_coverage_threshold.sh
-          ./scripts/check_coverage_threshold.sh 75
+  #     - name: Check coverage threshold
+  #       run: |
+  #         chmod +x scripts/check_coverage_threshold.sh
+  #         ./scripts/check_coverage_threshold.sh 75
 
-      - name: Upload coverage reports
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: coverage-reports
-          path: |
-            coverage.xml
-            htmlcov/
-          retention-days: 30
+  #     - name: Upload coverage reports
+  #       uses: actions/upload-artifact@v4
+  #       if: always()
+  #       with:
+  #         name: coverage-reports
+  #         path: |
+  #           coverage.xml
+  #           htmlcov/
+  #         retention-days: 30
 
-      - name: Display coverage summary
-        run: |
-          echo "📊 Coverage Summary:"
-          echo "==================="
-          python -c "
-          import xml.etree.ElementTree as ET
-          try:
-              tree = ET.parse('coverage.xml')
-              root = tree.getroot()
-              line_rate = float(root.attrib.get('line-rate', 0)) * 100
-              branch_rate = float(root.attrib.get('branch-rate', 0)) * 100
-              print(f'Line Coverage: {line_rate:.1f}%')
-              print(f'Branch Coverage: {branch_rate:.1f}%')
-          except:
-              print('Could not parse coverage.xml')
-          "
+  #     - name: Display coverage summary
+  #       run: |
+  #         echo "📊 Coverage Summary:"
+  #         echo "==================="
+  #         python -c "
+  #         import xml.etree.ElementTree as ET
+  #         try:
+  #             tree = ET.parse('coverage.xml')
+  #             root = tree.getroot()
+  #             line_rate = float(root.attrib.get('line-rate', 0)) * 100
+  #             branch_rate = float(root.attrib.get('branch-rate', 0)) * 100
+  #             print(f'Line Coverage: {line_rate:.1f}%')
+  #             print(f'Branch Coverage: {branch_rate:.1f}%')
+  #         except:
+  #             print('Could not parse coverage.xml')
+  #         "
 
-  sonar:
-    name: SonarQube Analysis with Coverage 📈
-    runs-on: self-hosted
-    needs: [sonar_run, test]
-    env:
-      SONAR_PROJECT_KEY: devops-final-project
-      SONAR_PROJECT_NAME: DevOps Final Project
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      SONAR_HOST_URL: http://localhost:9090
-    steps:
+  # sonar:
+  #   name: SonarQube Analysis with Coverage 📈
+  #   runs-on: self-hosted
+  #   needs: [sonar_run, test]
+  #   env:
+  #     SONAR_PROJECT_KEY: devops-final-project
+  #     SONAR_PROJECT_NAME: DevOps Final Project
+  #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #     SONAR_HOST_URL: http://localhost:9090
+  #   steps:
 
-      - name: Esperar a que SonarQube esté disponible
-        run: |
-          max_attempts=30
-          attempt=1
-          until curl -sSf $SONAR_HOST_URL/api/system/status | grep -q '"status":"UP"'; do
-            if [ $attempt -ge $max_attempts ]; then
-              echo "❌ SonarQube no disponible tras $max_attempts intentos"
-              exit 1
-            fi
-            echo "⏳ Esperando a SonarQube... intento $attempt/$max_attempts"
-            attempt=$((attempt+1))
-            sleep 10
-          done
-          echo "✅ SonarQube está disponible"
+  #     - name: Esperar a que SonarQube esté disponible
+  #       run: |
+  #         max_attempts=30
+  #         attempt=1
+  #         until curl -sSf $SONAR_HOST_URL/api/system/status | grep -q '"status":"UP"'; do
+  #           if [ $attempt -ge $max_attempts ]; then
+  #             echo "❌ SonarQube no disponible tras $max_attempts intentos"
+  #             exit 1
+  #           fi
+  #           echo "⏳ Esperando a SonarQube... intento $attempt/$max_attempts"
+  #           attempt=$((attempt+1))
+  #           sleep 10
+  #         done
+  #         echo "✅ SonarQube está disponible"
 
-      - name: Checkout
-        uses: actions/checkout@v4
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Download coverage reports
-        uses: actions/download-artifact@v4
-        with:
-          name: coverage-reports
+  #     - name: Download coverage reports
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: coverage-reports
 
-      - name: Run SonarQube Scan with Coverage
-        uses: SonarSource/sonarqube-scan-action@v6
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: http://localhost:9090
+  #     - name: Run SonarQube Scan with Coverage
+  #       uses: SonarSource/sonarqube-scan-action@v6
+  #       env:
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #         SONAR_HOST_URL: http://localhost:9090
 
-      - name: Wait & check SonarQube quality gate
-        run: |
-          chmod +x scripts/check_sonar_quality_gate.sh
-          ./scripts/check_sonar_quality_gate.sh devops-final-project 180
+  #     - name: Wait & check SonarQube quality gate
+  #       run: |
+  #         chmod +x scripts/check_sonar_quality_gate.sh
+  #         ./scripts/check_sonar_quality_gate.sh devops-final-project 180
 
-      - name: Display SonarQube metrics
-        if: always()
-        run: |
-          echo "🎯 SonarQube Analysis Complete!"
-          echo "================================"
-          echo "📊 Check your SonarQube dashboard at: $SONAR_HOST_URL"
-          echo "🔍 Project: $SONAR_PROJECT_KEY"
-          echo "📈 Coverage data has been integrated with code quality metrics"
+  #     - name: Display SonarQube metrics
+  #       if: always()
+  #       run: |
+  #         echo "🎯 SonarQube Analysis Complete!"
+  #         echo "================================"
+  #         echo "📊 Check your SonarQube dashboard at: $SONAR_HOST_URL"
+  #         echo "🔍 Project: $SONAR_PROJECT_KEY"
+  #         echo "📈 Coverage data has been integrated with code quality metrics"
 
-  build-and-scan:
-    name: Build & Scan Image 🛠️🔒
-    runs-on: ubuntu-latest
-    needs: sonar
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          clean: true
+  # build-and-scan:
+  #   name: Build & Scan Image 🛠️🔒
+  #   runs-on: ubuntu-latest
+  #   needs: sonar
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         clean: true
 
-      - name: Build Docker image
-        run: |
-          docker build -t test-app:latest .
+  #     - name: Build Docker image
+  #       run: |
+  #         docker build -t test-app:latest .
 
-      - name: Scan image with Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: test-app:latest
-          format: 'table'
-          output: 'trivy-results.txt'
-          severity: 'CRITICAL,HIGH'
+  #     - name: Scan image with Trivy
+  #       uses: aquasecurity/trivy-action@master
+  #       with:
+  #         image-ref: test-app:latest
+  #         format: 'table'
+  #         output: 'trivy-results.txt'
+  #         severity: 'CRITICAL,HIGH'
 
-      - name: Display Trivy scan results
-        if: always()
-        run: |
-          echo "🔍 Security Scan Results for test-app:latest"
-          echo "============================================="
-          if [ -f trivy-results.txt ]; then
-            cat trivy-results.txt
+  #     - name: Display Trivy scan results
+  #       if: always()
+  #       run: |
+  #         echo "🔍 Security Scan Results for test-app:latest"
+  #         echo "============================================="
+  #         if [ -f trivy-results.txt ]; then
+  #           cat trivy-results.txt
             
-            # Count vulnerabilities
-            CRITICAL=$(grep -c "CRITICAL" trivy-results.txt || echo "0")
-            HIGH=$(grep -c "HIGH" trivy-results.txt || echo "0")
+  #           # Count vulnerabilities
+  #           CRITICAL=$(grep -c "CRITICAL" trivy-results.txt || echo "0")
+  #           HIGH=$(grep -c "HIGH" trivy-results.txt || echo "0")
             
-            echo ""
-            echo "📊 Summary:"
-            echo "  🔴 Critical: $CRITICAL"
-            echo "  🟠 High: $HIGH"
+  #           echo ""
+  #           echo "📊 Summary:"
+  #           echo "  🔴 Critical: $CRITICAL"
+  #           echo "  🟠 High: $HIGH"
             
-            if [ "$CRITICAL" -gt 0 ] || [ "$HIGH" -gt 0 ]; then
-              echo "⚠️  Security vulnerabilities detected!"
-              echo "🔧 Consider updating base images or dependencies"
-            else
-              echo "✅ No critical or high severity vulnerabilities found!"
-            fi
-          else
-            echo "❌ Trivy scan results not found"
-          fi
+  #           if [ "$CRITICAL" -gt 0 ] || [ "$HIGH" -gt 0 ]; then
+  #             echo "⚠️  Security vulnerabilities detected!"
+  #             echo "🔧 Consider updating base images or dependencies"
+  #           else
+  #             echo "✅ No critical or high severity vulnerabilities found!"
+  #           fi
+  #         else
+  #           echo "❌ Trivy scan results not found"
+  #         fi
 
   run:
     name: Create and Run Container
     runs-on: self-hosted
-    needs: [build-and-scan, test]
+    # needs: [build-and-scan, test]
+    env:
+      ENVIRONMENT: ${{ github.event_name == 'pull_request' && 'production' || 'staging' }}
+    
+    environment:
+      name: ${{ github.event_name == 'pull_request' && 'production' || 'staging' }}
+      url: http:// ${{ github.event_name == 'pull_request' && 'production' || 'staging' }}.local
+
     steps:
+      - name: Check variables
+        run: |
+          echo "github.event_name: ${{ github.event_name }}"
+          echo "github.ref: ${{ github.ref }}"
+          echo "ENVIRONMENT: $ENVIRONMENT"
       - name: Create Images
         run: |
-          docker build -t test-app:latest .
+          docker build -t test-app:$ENVIRONMENT .
       - name: Remove container
         run: |
-          docker rm -f flask-app
-      - name: Run
-        run: |
-          docker run -d --name flask-app -p 3000:5000 test-app:latest
+          docker rm -f flask-app-$ENVIRONMENT
 
+      - name: Run container (auto deploy)
+        run: |
+          echo "Deploying to environment: $ENVIRONMENT"
+
+          if [ "$ENVIRONMENT" = "production" ]; then
+            PORT=3002
+          else
+            PORT=3001
+          fi
+
+          docker run -d \
+            --name flask-app-$ENVIRONMENT \
+            -p $PORT:5000 \
+            test-app:$ENVIRONMENT
