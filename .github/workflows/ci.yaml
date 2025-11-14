@@ -222,7 +222,7 @@ jobs:
     runs-on: self-hosted
     # needs: [build-and-scan, test]
     env:      
-      ENVIRONMENT: ${{ github.event_name == 'pull_request' && github.base_ref == 'dev' && 'production' || 'staging' }}
+      ENVIRONMENT: ${{ github.event_name == 'pull_request' && github.ref == 'refs/heads/dev' && 'production' || 'staging' }}
     
     environment:
       name: $ENVIRONMENT
@@ -232,7 +232,7 @@ jobs:
       - name: Check variables
         run: |
           echo "github.event_name: ${{ github.event_name }}"
-          echo "github.base_ref: ${{ github.base_ref }}"
+          echo "github.ref: ${{ github.ref }}"
           echo "ENVIRONMENT: $ENVIRONMENT"
       - name: Create Images
         run: |
