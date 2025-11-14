@@ -225,8 +225,8 @@ jobs:
       ENVIRONMENT: ${{ github.event_name == 'pull_request' && 'production' || 'staging' }}
     
     environment:
-      name: ${{ env.ENVIRONMENT }}
-      url: http://${{ env.ENVIRONMENT }}.local
+      name: ${{ github.event_name == 'pull_request' && 'production' || 'staging' }}
+      url: http:// ${{ github.event_name == 'pull_request' && 'production' || 'staging' }}.local
 
     steps:
       - name: Check variables
