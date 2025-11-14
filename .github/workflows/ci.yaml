@@ -221,8 +221,8 @@ jobs:
     name: Create and Run Container
     runs-on: self-hosted
     # needs: [build-and-scan, test]
-    env:      
-      ENVIRONMENT: ${{ github.event_name == 'pull_request' && github.ref == 'refs/heads/dev' && 'production' || 'staging' }}
+    env:
+      ENVIRONMENT: ${{ github.event_name == 'pull_request' && 'production' || 'staging' }}
     
     environment:
       name: $ENVIRONMENT
