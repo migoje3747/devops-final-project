@@ -117,7 +117,7 @@ jobs:
   sonar:
     name: SonarQube Analysis with Coverage 📈
     runs-on: self-hosted
-    needs: sonar_run
+    needs: [sonar_run, test]
     env:
       SONAR_PROJECT_KEY: devops-final-project
       SONAR_PROJECT_NAME: DevOps Final Project
