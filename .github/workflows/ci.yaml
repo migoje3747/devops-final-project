@@ -1,7 +1,7 @@
 name: CI - Lint, Test, Sonar, Build, Scan
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -221,14 +221,31 @@ jobs:
     name: Create and Run Container
     runs-on: self-hosted
     needs: [build-and-scan, test]
+    env:
+      ENVIRONMENT: ${{ github.ref_name }}
+    
+    environment:
+      name: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+
     steps:
       - name: Create Images
         run: |
-          docker build -t test-app:latest .
+          docker build -t test-app:$ENVIRONMENT .
       - name: Remove container
         run: |
-          docker rm -f flask-app
-      - name: Run
-        run: |
-          docker run -d --name flask-app -p 3000:5000 test-app:latest
+          docker rm -f flask-app-$ENVIRONMENT
 
+      - name: Run container (auto deploy)
+        run: |
+          echo "Deploying to environment: $ENVIRONMENT"
+
+          if [ "$ENVIRONMENT" = "staging" ]; then
+            PORT=5001
+          else
+            PORT=5002
+          fi
+
+          docker run -d \
+            --name flask-app-$ENVIRONMENT \
+            -p 3000:$PORT \
+            test-app:$ENVIRONMENT
