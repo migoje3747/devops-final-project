@@ -1,4 +1,4 @@
-# DevOps Final Project 🚀
+# DevOps Final Project
 
 Este proyecto es una aplicación **Flask** sencilla que sirve como laboratorio de prácticas de DevOps.  
 Su objetivo es demostrar cómo integrar una aplicación web con **Prometheus**, **Grafana**, **Node Exporter** y **Alertmanager** para monitorización y alertas, además de aplicar buenas prácticas de contenedores, CI/CD y calidad de código.
@@ -17,7 +17,7 @@ Su objetivo es demostrar cómo integrar una aplicación web con **Prometheus**, 
 
 ---
 
-## 📌 Características principales
+## Características principales
 - Aplicación web en **Python/Flask** con endpoints:
   - `/` → saludo y contador de visitas.
   - `/health` → estado de salud.
@@ -36,7 +36,7 @@ Su objetivo es demostrar cómo integrar una aplicación web con **Prometheus**, 
 
 ---
 
-## 📂 Estructura del proyecto
+## Estructura del proyecto
 
 ```bash
 devops-final-project/
@@ -66,7 +66,7 @@ devops-final-project/
 
 ---
 
-## 🚀 Instalación y ejecución
+## Instalación y ejecución
 
 ### 1. Construir la imagen de la aplicación
 ```bash
@@ -95,7 +95,7 @@ Alertmanager → http://localhost:9093
 
 ---
 
-## 📊 Métricas Prometheus
+## Métricas Prometheus
 ### Aplicación Flask
  - app_visits_total → visitas acumuladas.
  - app_errors_total → errores acumulados.
@@ -110,7 +110,7 @@ Alertmanager → http://localhost:9093
 
 ---
 
-## 🚨 Alertas configuradas
+## Alertas configuradas
 En alert.rules.yml se definen reglas como:
  - HighRequestLatency → latencia p95 > 2s.
  - HighErrorRate → tasa de errores > 0.1 req/s.
@@ -122,7 +122,7 @@ Alertmanager recibe estas alertas y las envia grafana.
 
 ---
 
-## 📈 Dashboard Grafana
+## Dashboard Grafana
 El dashboard (grafana/dashboard.json) incluye paneles para:
  - Total de visitas y errores.
  - Requests por endpoint.
@@ -133,7 +133,7 @@ El dashboard (grafana/dashboard.json) incluye paneles para:
 
 ---
 
-## 🛠️ CI/CD y calidad
+## CI/CD y calidad
  - GitHub Actions: workflows en .github/workflows para integración continua.
  - SonarQube: análisis estático de calidad de código.
  - Docker: despliegue reproducible y portable.
