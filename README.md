@@ -131,6 +131,8 @@ El dashboard (grafana/dashboard.json) incluye paneles para:
  - Uso de CPU, memoria, disco y red (Node Exporter).
  - Estado de las alertas (Alertmanager).
 
+<img width="1379" height="805" alt="image" src="https://github.com/user-attachments/assets/082c769b-b6d0-488c-bd8a-f219bb1cde4f" />
+
 ---
 
 ## CI/CD y calidad
