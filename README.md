@@ -84,7 +84,7 @@ La aplicación estará disponible en http://localhost:5000.
 docker compose -f docker-compose.monitoring.yml up -d
 Servicios desplegados:
 
-Prometheus → http://localhost:9090
+Prometheus → http://localhost:9091
 
 Grafana → http://localhost:3010
 
