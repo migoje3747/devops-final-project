@@ -1,0 +1,43 @@
+volumes:
+  grafana_data_monitor:
+  
+networks:
+  monitor_network:
+    # external: true
+    driver: bridge
+    name: monitor_network
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    networks:
+      - monitor_network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana_data_monitor:/var/lib/grafana
+    ports:
+      - "3010:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - monitor_network
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter
+    container_name: node-exporter
+    networks:
+      - monitor_network
+    ports:
+      - "9100:9100"
+    restart: "no"

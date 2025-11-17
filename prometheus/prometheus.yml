@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  # Scrape de Node Exporter
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+  # Scrape de Prometheus (autoconsumo)
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'stg-app'
+    static_configs:
+      - targets: ['flask-app-staging:5000']
+      
+  - job_name: 'prod-app'
+    static_configs:
+      - targets: ['flask-app-production:5000']

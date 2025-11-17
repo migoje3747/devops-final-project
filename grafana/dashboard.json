@@ -1,0 +1,61 @@
+{
+  "id": null,
+  "uid": "flask-devops-lab",
+  "title": "Flask DevOps Lab Metrics",
+  "tags": ["flask", "prometheus", "devops"],
+  "timezone": "browser",
+  "schemaVersion": 36,
+  "version": 1,
+  "editable": true,
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Total de visitas",
+      "targets": [
+        { "expr": "app_visits_total" }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Total de errores",
+      "targets": [
+        { "expr": "app_errors_total" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Requests por endpoint",
+      "targets": [
+        { "expr": "sum(rate(request_latency_seconds_count[1m])) by (endpoint)" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Latencia promedio por endpoint",
+      "targets": [
+        { "expr": "sum(rate(request_latency_seconds_sum[5m])) by (endpoint) / sum(rate(request_latency_seconds_count[5m])) by (endpoint)" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Latencia p95 por endpoint",
+      "targets": [
+        { "expr": "histogram_quantile(0.95, sum(rate(request_latency_seconds_bucket[5m])) by (le, endpoint))" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Duración promedio /calculate",
+      "targets": [
+        { "expr": "rate(calculate_duration_seconds_sum[5m]) / rate(calculate_duration_seconds_count[5m])" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Duración p90 /calculate",
+      "targets": [
+        { "expr": "histogram_quantile(0.90, sum(rate(calculate_duration_seconds_bucket[5m])) by (le))" }
+      ]
+    }
+  ]
+}
