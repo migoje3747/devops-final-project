@@ -6,10 +6,10 @@ Su objetivo es demostrar cómo integrar una aplicación web con **Prometheus**, 
 ---
 
 ## Mienbros del grupo:
- - **Nombre:** Miembro 1  
-   **Correo:** miembro.1z@ctag.com
- - **Nombre:** Miembro 2  
-   **Correo:** miembro.2z@ctag.com
+ - **Nombre:** Miguel Ojea Pérez
+   **Correo:** miguel.ojea3747@ctag.com
+ - **Nombre:** Andrés Alfaya  
+   **Correo:** andres.alfaya@ctag.com
  - **Nombre:** Miembro 3  
    **Correo:** miembro.3z@ctag.com
  - **Nombre:** Miembro 4  
@@ -132,6 +132,7 @@ El dashboard (grafana/dashboard.json) incluye paneles para:
  - Estado de las alertas (Alertmanager).
 
 <img width="1379" height="805" alt="image" src="https://github.com/user-attachments/assets/082c769b-b6d0-488c-bd8a-f219bb1cde4f" />
+<img width="1383" height="651" alt="image" src="https://github.com/user-attachments/assets/45d1d641-75c7-407f-97da-d62024ba7d21" />
 
 ---
 
