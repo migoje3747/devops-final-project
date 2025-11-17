@@ -255,3 +255,7 @@ jobs:
             --name flask-app-$ENVIRONMENT \
             -p $PORT:5000 \
             test-app:$ENVIRONMENT
+
+      - name: Connect to the Protheus network
+        run: |
+          docker network connect monitor_network flask-app-$ENVIRONMENT

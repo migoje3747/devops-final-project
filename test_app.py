@@ -82,5 +82,10 @@ class TestFlaskApp(unittest.TestCase):
         self.assertEqual(badFunction(15, 5), 20)    # x > 10, y <= 10
         self.assertEqual(badFunction(5, 20), 0)     # x <= 10
 
+    def test_metrics_exposure(self):
+        # NOT TESTED #
+        response = self.app.get('/metrics')
+        self.assertEqual(response.status_code, 200)
+
 if __name__ == '__main__':
     unittest.main()
