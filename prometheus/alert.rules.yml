@@ -1,0 +1,54 @@
+groups:
+- name: flask-app-alerts
+  rules:
+  # Latencia elevada en la aplicación
+  - alert: HighRequestLatency
+    expr: histogram_quantile(0.95, sum(rate(request_latency_seconds_bucket[5m])) by (le, endpoint)) > 2
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Latencia p95 superior a 2s"
+      description: "El endpoint {{ $labels.endpoint }} tiene latencia p95 > 2s"
+
+  # Tasa de errores elevada
+  - alert: HighErrorRate
+    expr: rate(app_errors_total[5m]) > 0.1
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Tasa de errores elevada"
+      description: "La aplicación está devolviendo demasiados errores"
+
+- name: node-alerts
+  rules:
+  # CPU alta en el host
+  - alert: HighCPUUsage
+    expr: 100 - (avg by(instance)(rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 80
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Uso de CPU > 80%"
+      description: "El host {{ $labels.instance }} tiene CPU > 80%"
+
+  # Memoria baja disponible
+  - alert: LowMemoryAvailable
+    expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 < 20
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Memoria disponible < 20%"
+      description: "El host {{ $labels.instance }} tiene poca memoria libre"
+
+  # Disco casi lleno
+  - alert: HighDiskUsage
+    expr: (node_filesystem_size_bytes{fstype!="tmpfs"} - node_filesystem_free_bytes{fstype!="tmpfs"}) / node_filesystem_size_bytes{fstype!="tmpfs"} * 100 > 85
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Uso de disco > 85%"
+      description: "El host {{ $labels.instance }} tiene el disco casi lleno"

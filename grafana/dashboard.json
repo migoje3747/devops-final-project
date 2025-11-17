@@ -56,6 +56,46 @@
       "targets": [
         { "expr": "histogram_quantile(0.90, sum(rate(calculate_duration_seconds_bucket[5m])) by (le))" }
       ]
+    },
+    {
+      "type": "timeseries",
+      "title": "CPU Usage (%)",
+      "targets": [
+        { "expr": "100 - (avg by(instance)(rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Memory Usage (bytes)",
+      "targets": [
+        { "expr": "node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Disk Usage (%)",
+      "targets": [
+        { "expr": "(node_filesystem_size_bytes{fstype!=\"tmpfs\"} - node_filesystem_free_bytes{fstype!=\"tmpfs\"}) / node_filesystem_size_bytes{fstype!=\"tmpfs\"} * 100" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Network Receive (bytes/s)",
+      "targets": [
+        { "expr": "rate(node_network_receive_bytes_total[5m])" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Network Transmit (bytes/s)",
+      "targets": [
+        { "expr": "rate(node_network_transmit_bytes_total[5m])" }
+      ]
+    },
+    {
+      "type": "alertlist",
+      "title": "Prometheus Alerts",
+      "datasource": "Prometheus"
     }
   ]
 }
