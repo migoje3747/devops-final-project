@@ -5,15 +5,13 @@ Su objetivo es demostrar cómo integrar una aplicación web con **Prometheus**, 
 
 ---
 
-## Mienbros del grupo:
+## Miembros del grupo:
  - **Nombre:** Miguel Ojea Pérez
    **Correo:** miguel.ojea3747@ctag.com
  - **Nombre:** Andrés Alfaya  
    **Correo:** andres.alfaya@ctag.com
  - **Nombre:** Natalia R. Campos Pietanesi
    **Correo:** licnataliaro@gmail.com / natalia.campos4079@ctag.com
- - **Nombre:** Miembro 4  
-   **Correo:** miembro.4@ctag.com
 
 ---
 
