@@ -12,8 +12,8 @@ Su objetivo es demostrar cómo integrar una aplicación web con **Prometheus**, 
    **Correo:** andres.alfaya@ctag.com
  - **Nombre:** Natalia R. Campos Pietanesi
    **Correo:** licnataliaro@gmail.com / natalia.campos4079@ctag.com
- - **Nombre:** Miembro 4  
-   **Correo:** miembro.4@ctag.com
+ - **Nombre:** Rodrigo Helaconde 
+   **Correo:** rodhel3666@ctag.com
 
 ---
 
